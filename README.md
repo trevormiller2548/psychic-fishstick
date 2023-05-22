@@ -2,5 +2,12 @@ Like I touched on in my comments, I didn't end up using the APIs in the way I wa
 
 Here are the main sources I used
 https://day.js.org/en/
+https://mirzaleka.medium.com/the-complete-guide-to-day-js-fb835a5d945a
+https://blog.openreplay.com/working-with-dates-and-times-with-day-js/
+https://zetcode.com/javascript/dayjs/
+https://www.geeksforgeeks.org/dayjs-introduction-and-installation/
 
+Live site and github page:
+https://trevormiller2548.github.io/psychic-fishstick/
+https://github.com/trevormiller2548/psychic-fishstick
 
