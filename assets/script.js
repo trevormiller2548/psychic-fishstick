@@ -1,62 +1,59 @@
-//This should wrap my code in dayjs
-$( document ).ready(function() {
- //I'm puting this in here to display the current date
-var a= dayjs().format('dddd MMMM DD YYYY, h:mm');
-  $("#display-date").text(a)
-  var row = ""
- //I'm creating a loop here to set the time 
-    for (var i= 9 ; i<=18; i++){
-      // I'm creating a row of elements here
-      row = $(`<div class="row">`)
-      col1 = $(`<div class ="col-lg-2 hour">${displayAmorPm(i)}</div>`)
-      col2 = $(`<div class ="col-lg-8 inputcontent"><input data-input="${i}" id="inputText${i}" class="form-control inputText" type="text" name="userInput"></div>`)
-      col3 = $(`<div class ="col-lg-2"><button data-id="${i}" id="savePlanner" class="btn btn-success btn-block"><i class="fas fa-save"></i> Save</button></div>`)
-      row.append(col1)
-      row.append(col2)
-      row.append(col3)
-      $("#display-planner").append(row)
-      getlocalStorage(i)
-    }
-   $("button.btn.btn-success").click(function(e){
-   var id = $(this).data("id")
-   var inputText = $(this).parent().siblings().find("input").val()
-   localStorage.setItem(id,inputText)
-   })
-  //  this is to convert Am to Pm
-   function displayAmorPm(hour){
-     var b=""
-     if(hour<=12){
-       b= "AM"
-     }else{
-       b="PM"
-     }
-     hour = hour % 12
-     hour = hour ? hour : 12
-     return hour + " " + b
-   }
-  });
+//I initially tried to go light weight on html and creat the elements and commands I needed in javascript. 
+//But I couldn't figure out why I couldn't get my rows to have color. 
+//I had a tough time with it. So, I ended up putting the elements into html
+//and that way I was able to find a way save data to local storage and get the coloring I needed for the project.
+//I tried to keep some aspects of my initial work, but the code kept breaking, so I redid all of it
 
-   function getlocalStorage(hour){
-     let inputval = localStorage.getItem(hour)
-     if(true){
-      var text= $(`input#inputText${hour}`).val(inputval)
-      console.log(text)
-     }
-   }
-   //This is so the rows change colors
-   function updateColor(){
-     var hour = new Date().getHours();
-     for (var i= 9 ; i<=18; i++){
-       console.log(hour,i)
-       if(hour==i ) {
-        $(`#inputText${i}`).css("background","red")
-       }else  if(hour<i ){
-        
-         $(`#inputText${i}`).css("background","lightblue")
+$(document).ready(function () { //to access css and html
+   var a= dayjs().format('dddd MMMM DD YYYY, h:mm');
+     $("#display-date").text(a) //current date from dayjs
+  $(".saveBtn").on("click", function () {
+      //this is going to get the values i need.
+      console.log(this);
+      var text = $(this).siblings(".description").val(); 
+      var time = $(this).parent().attr("id"); 
 
-       }
-     }
-   }
-   setInterval(function(){
-     updateColor()
-   },1000)
+      localStorage.setItem(time, text);
+  })
+//when I changed my html to make my colors work, I broke my code and lost ability to access local storage.
+// so I had to go with this. It's a bit busy but it seems to get the job done. 
+      $("#hour8 .description").val(localStorage.getItem("hour8"));
+      $("#hour9 .description").val(localStorage.getItem("hour9"));
+      $("#hour10 .description").val(localStorage.getItem("hour10"));
+      $("#hour11 .description").val(localStorage.getItem("hour11"));
+      $("#hour12 .description").val(localStorage.getItem("hour12"));
+      $("#hour13 .description").val(localStorage.getItem("hour13"));
+      $("#hour14 .description").val(localStorage.getItem("hour14"));
+      $("#hour15 .description").val(localStorage.getItem("hour15"));
+      $("#hour16 .description").val(localStorage.getItem("hour16"));
+      $("#hour17 .description").val(localStorage.getItem("hour17"));
+    });
+
+   function hourTracker() {
+    var currentHour = dayjs().hour(); //getting current time
+    // and I'm doing this to loop over the time blocks
+    $(".time-block").each(function () {
+        var blockHour = parseInt($(this).attr("id").split("hour")[1]);
+        console.log( blockHour, currentHour)
+
+
+        if (blockHour < currentHour) { //this is going to determine is the it's past or present.
+          //and then of css will dictate the colors depending on past, present or future
+            $(this).addClass("past");
+            $(this).removeClass("future");
+            $(this).removeClass("present");
+        }
+        else if (blockHour === currentHour) {
+            $(this).removeClass("past");
+            $(this).addClass("present");
+            $(this).removeClass("future");
+        }
+        else {
+            $(this).removeClass("present");
+            $(this).removeClass("past");
+            $(this).addClass("future");
+        }
+    })
+}
+hourTracker(); //re-run function
+
